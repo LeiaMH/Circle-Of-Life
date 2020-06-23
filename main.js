@@ -1,10 +1,8 @@
 const draw = SVG().addTo('.field').size(400, 400);
-const playground = draw.rect(400, 400).fill({color:'#ccc', opacity:0.75}).stroke({color:'#aaa', width:6});
+const playground = draw.rect(400, 400).fill({color:'#ccc', opacity:0.75}).stroke({color:'#888', width:6});
 
 
-const life1 = draw.circle(30).fill('#d22').attr({cx: 200, cy: 200});
-const life2 = draw.circle(30).fill('#d22').attr({cx: 100, cy: 100});
-const life3 = draw.circle(30).fill('#d22').attr({cx: 300, cy: 300});
+//const life1 = draw.circle(10).fill('#d22').attr({cx: 200, cy: 200});
 
 //Population Size (P) (get from code)
 //Birth Rate (B)(The number of live births per 1,000 population in a given year.)
@@ -20,64 +18,28 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 };
 
+class Life{
+    constructor(xcoord, ycoord){
+    this.body = draw.circle(15).fill('#54BB7B')
+    this.xcoord = this.body.cx(xcoord);
+    this.ycoord = this.body.cy(ycoord);
+    }
+    moveAbout(movement, wait){
+        for (let i=0; i < movement; i++){ 
+        this.body.animate().delay(wait).dx(getRandomInt(-40, 41)).dy(getRandomInt(-40,41))
+    }}
+}
 
-for (let i=0; i < 30; i++){
-    if(life1.x() >= 380){
-        console.log('check1');
-        life1.animate().delay(getRandomInt(40, 60)).dx(-20)
-    };
-    if(life1.x() <= 20){
-        console.log('check1');
-        life1.animate().delay(getRandomInt(40, 60)).dx(21)
-    };
-    if(life1.y() >= 380){
-        console.log('check1');
-        life1.animate().delay(getRandomInt(40, 60)).dy(-20)
-    };
-    if(life1.y() <= 20){
-        console.log('check1');
-        life1.animate().delay(getRandomInt(40, 60)).dy(20)
-    }else{
-       
-        life1.animate().delay(getRandomInt(40, 60)).dx(getRandomInt(-40, 41)).dy(getRandomInt(-40,41))
-}};
+let total = 0;
 
-for (let i=0; i < 30; i++){
-    if(life2.x() >= 380){
-        console.log('check2');
-        life2.animate().delay(getRandomInt(60, 80)).dx(-20)
-    };
-    if(life2.x() <= 20){
-        console.log('check2');
-        life2.animate().delay(getRandomInt(60, 80)).dx(21)
-    };
-    if(life2.y() >= 380){
-        console.log('check2');
-        life2.animate().delay(getRandomInt(60, 80)).dy(-20)
-    };
-    if(life2.y() <= 20){
-        console.log('check2');
-        life2.animate().delay(getRandomInt(60, 80)).dy(20)
-    }else{
-        life2.animate().delay(getRandomInt(60, 80)).dx(getRandomInt(-40, 41)).dy(getRandomInt(-40,41))
-}};
-
-for (let i=0; i < 30; i++){
-    if(life3.x() >= 380){
-        console.log('check3');
-        life3.animate().delay(getRandomInt(20, 40)).dx(-20)
-    };
-    if(life3.x() <= 20){
-        console.log('check3');
-        life3.animate().delay(getRandomInt(20, 40)).dx(21)
-    };
-    if(life3.y() >= 380){
-        console.log('check3');
-        life3.animate().delay(getRandomInt(20, 40)).dy(-20)
-    };
-    if(life3.y() <= 20){
-        console.log('check3');
-        life3.animate().delay(getRandomInt(20, 40)).dy(20)
-    }else{
-    life3.animate().delay(getRandomInt(20, 40)).dx(getRandomInt(-40, 41)).dy(getRandomInt(-40,41));
-}};
+function startRound(birthRate){
+    let chance = getRandomInt(0, 100);
+    if (chance <= birthRate){
+        let newLife = new Life(getRandomInt(10, 390), getRandomInt(10, 390));
+        newLife.moveAbout(100, getRandomInt(1, 100));
+        total += 1;
+    }
+    console.log(`Population Size: ${total}`);
+}
+birthRate = 30;
+//setInterval(startRound, 1000, birthRate);
