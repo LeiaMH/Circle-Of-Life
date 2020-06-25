@@ -1,9 +1,25 @@
-const draw = SVG().addTo('.field').size(400, 400);
+const draw = SVG().addTo('.canvas').size(400, 400);
 const playground = draw.rect(400, 400).fill({color:'#ccc', opacity:0.75}).stroke({color:'#888', width:6});
 
+const displayPopulation = document.querySelector('.info span');
+const birthElement = document.querySelector('.births');
+const deathElement = document.querySelector('.deaths');
 
-//const life1 = draw.circle(10).fill('#d22').attr({cx: 200, cy: 200});
 
+birthElement.addEventListener('keypress', setRates);
+deathElement.addEventListener('keypress', setRates);
+
+function setRates(event){
+    if(event.keyCode == 13){
+        birthrate = birthElement.value;
+        deathrate = deathElement.value;
+        startRound();
+    };
+}
+
+let birthrate = 0;
+let deathrate = 0;
+let growthrate = birthrate - deathrate;
 //Population Size (P) (get from code)
 //Birth Rate (B)(The number of live births per 1,000 population in a given year.)
 // B = b(set by user)/P(get from code)
@@ -19,27 +35,46 @@ function getRandomInt(min, max) {
 };
 
 class Life{
-    constructor(xcoord, ycoord){
-    this.body = draw.circle(15).fill('#54BB7B')
+    constructor(name, xcoord, ycoord, bodysize){
+    this.name = name;
+    this.body = draw.circle(bodysize).fill('#54BB7B');
     this.xcoord = this.body.cx(xcoord);
     this.ycoord = this.body.cy(ycoord);
     }
     moveAbout(movement, wait){
-        for (let i=0; i < movement; i++){ 
+        for (let i=0; i < movement; i++){
         this.body.animate().delay(wait).dx(getRandomInt(-40, 41)).dy(getRandomInt(-40,41))
     }}
+    
 }
 
-let total = 0;
+let population = [];
+let newName = 0;
 
-function startRound(birthRate){
+function suddenBirth(birthrate){
     let chance = getRandomInt(0, 100);
-    if (chance <= birthRate){
-        let newLife = new Life(getRandomInt(10, 390), getRandomInt(10, 390));
-        newLife.moveAbout(100, getRandomInt(1, 100));
-        total += 1;
+    if (chance < birthrate){
+        let newLife = new Life(`Poosh${newName++}`, getRandomInt(10, 390), getRandomInt(10, 390), 15);
+        newLife.moveAbout(100, getRandomInt(1, 300));
+        population.push(newLife);
     }
-    console.log(`Population Size: ${total}`);
+    displayPopulation.innerHTML = '   ' + population.length;
+    console.log(`Population Size: ${population.length}`);
 }
-birthRate = 30;
-//setInterval(startRound, 1000, birthRate);
+
+
+function suddenDeath(deathrate){
+    let chance = getRandomInt(0, 100);
+    if (chance < deathrate){
+       console.log(population[0]);
+       population[0].body.remove();
+       
+       console.log(population[0]);
+       population.shift(population[0]);
+    }
+}
+
+function startRound(){
+setInterval(suddenBirth, 1000, birthrate);
+setInterval(suddenDeath, 1000, deathrate);
+}

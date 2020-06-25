@@ -3,11 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Circle of Life</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">    <title>The Circle of Life</title>
 </head>
 <body>
+
+<div class="wraper">
+    <h1>The Circle of Life</h1>
     
-    <div class="field"></div>
+    <div class="canvas"></div>
+
+    <label for="births">Birthrate</label>
+    <input type="text" class="births" placeholder="between 0 and 100"></input>
+    <label for="deaths">Deathrate</label>
+    <input type="text" class="deaths" placeholder="between 0 and 100"></input>
+    
+    <p class="info">Population Size:<span></span></p>
+</div>
 
    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.15/svg.min.js"></script>
