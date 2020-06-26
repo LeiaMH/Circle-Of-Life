@@ -11,7 +11,8 @@ const deathElement = document.querySelector('.deaths');
     //Setting Variables Needed
 let birthrate = 0;
 let deathrate = 0;
-let growthrate = birthrate - deathrate;
+//let growthrate = birthrate - deathrate;
+//let equilibrium = birthrate/deathrate;
 let population = [];
 let newName = 0;
 
@@ -20,14 +21,14 @@ birthElement.addEventListener('keypress', setRates);
 deathElement.addEventListener('keypress', setRates);
 
 function setRates(event){
-    if(event.keyCode == 13){
+    if(event.keyCode == 13){ 
         birthrate = birthElement.value;
         deathrate = deathElement.value;
         startSimulation();
     };
 }
 
-//Produce Random Integers between some Min and some Max
+//Produce Random Integer between some Min and some Max
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -36,9 +37,9 @@ function getRandomInt(min, max) {
 
 //Creature/Life - Object Constructor
 class Life{
-    constructor(name, xcoord, ycoord, bodysize){
+    constructor(name, xcoord, ycoord){
     this.name = name;
-    this.body = draw.circle(bodysize).fill('#54BB7B');
+    this.body = draw.circle(15).fill('#54BB7B');
     this.xcoord = this.body.cx(xcoord);
     this.ycoord = this.body.cy(ycoord);
     }
@@ -58,22 +59,19 @@ function startSimulation(){
 function suddenBirth(birthrate){
     let chance = getRandomInt(0, 100);
     if (chance < birthrate){
-        let newLife = new Life(`Poosh${newName++}`, getRandomInt(10, 390), getRandomInt(10, 390), 15);
+        let newLife = new Life(`Floof${newName++}`, getRandomInt(10, 390), getRandomInt(10, 390));
         newLife.moveAbout(100, getRandomInt(1, 300));
         population.push(newLife);
     }
-    populationElement.innerHTML = '   ' + population.length;
+    populationElement.innerHTML = population.length;
 }
 
     //Death Chance per Interval
 function suddenDeath(deathrate){
     let chance = getRandomInt(0, 100);
     if (chance < deathrate){
-       console.log(population[0]);
        population[0].body.remove();
-       
-       console.log(population[0]);
        population.shift(population[0]);
     }
-    populationElement.innerHTML = '   ' + population.length;
+    populationElement.innerHTML = population.length;
 }
